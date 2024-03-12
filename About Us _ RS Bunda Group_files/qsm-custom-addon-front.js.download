@@ -1,0 +1,64 @@
+(function ($) {
+    $( ".qsm-match-sortable" ).sortable({
+        cursor:"grabbing",
+        opacity:"0.8",
+        update: function( event, ui ) {
+            var parent = $(this).parent();
+            parent.find('.qsm_mc_answer_wrap').css('height','');
+            var i = 1;
+            $(this).children('.qsm_mc_answer_wrap').each(function(){
+                var left_element = parent.children('.qsm-left-option').find('.qsm_mc_answer_wrap:nth-child('+i+')');
+                var dragheight = $(this).outerHeight();
+                var height = left_element.outerHeight();
+                if(dragheight > height ){
+                    left_element.css('height',dragheight)
+                }else if(dragheight < height){
+                    $(this).css('height',height);
+                }
+                i++;
+            });
+
+        }
+    });
+    $( ".qsm-match-sortable" ).disableSelection();
+
+    $(document).ready(function(){
+        $('.qsm-matching-pairs').each(function(){
+            var parent = $(this);
+            parent.find('.qsm_mc_answer_wrap').css('height','');
+            var i = 1;
+            parent.find('.qsm-right-option .qsm_mc_answer_wrap').each(function(){
+                var left_element = parent.children('.qsm-left-option').find('.qsm_mc_answer_wrap:nth-child('+i+')');
+                var dragheight = $(this).outerHeight();
+                var height = left_element.outerHeight();
+                if(dragheight > height ){
+                    left_element.css('height',dragheight)
+                }else if(dragheight < height){
+                    $(this).css('height',height);
+                }
+                i++;
+            });
+        });
+    });
+    jQuery(document).on('qsm_after_validation', function (e, element, quiz_form_id) {
+        if (!show_result_validation) {
+            return show_result_validation;
+        }
+        var quiz_id = +jQuery('#' + quiz_form_id).find('.qmn_quiz_id').val();
+        var error_messages = qmn_quiz_data[quiz_id].error_messages;
+        jQuery(element).each(function () {
+            if ( jQuery(this).attr('class') && jQuery(this).is(':visible') ) {
+                if (jQuery(this).attr('class').indexOf('mlwRequiredRadioAllRows') > -1 ) {
+                    jQuery( ".qmn-grid-require-all-rows:visible" ).each(function() {
+                        check_val = jQuery(this).find('input:checked').val();                        
+                        if (check_val == "No Answer Provided" || check_val == '' || check_val == undefined) {
+                            qmnDisplayError(error_messages.empty_grid_radio_checkbox_text, jQuery(this), quiz_form_id);
+                            show_result_validation = false;
+                        }
+                    });
+                }
+            }
+        });
+	});
+}(jQuery));
+// 

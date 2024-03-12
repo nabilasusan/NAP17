@@ -1,0 +1,38 @@
+.qsm-popup__container footer.qsm-popup__footer .qsm-popup-secondary-button.qsm-restart-quiz-from-modal,
+.qsm-popup__container footer.qsm-popup__footer .qsm-popup-secondary-button.qsm-resume-quiz-from-modal {
+    border: 1px solid #D1D5DB !important;
+    border-radius: 6px;
+    width: 226px;
+    height: 38px;
+    font-size: 14px;
+    padding: 9px 17px;
+}
+
+footer.qsm-popup__footer button.qsm-popup-secondary-button.qsm-restart-quiz-from-modal {
+    background-color: #fff !important;
+    color: #374151 !important;
+}
+
+footer.qsm-popup__footer button.qsm-popup-secondary-button.qsm-resume-quiz-from-modal {
+    background: #2072B2 !important;
+}
+
+.qsm-first-line {
+    font-size: 18px;
+    font-weight: 700;
+    text-align: center;
+    line-height: 8px;
+}
+
+.qsm-second-line {
+    line-height: 20px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 400;
+    margin-left: 88px;
+    width: 288px;
+}
+
+body .qsm-popup__content img.qsm-save-vector-img {
+    width: auto;
+}

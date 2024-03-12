@@ -1,0 +1,56 @@
+jQuery(document).on('click', "#download_pdf_results_ajax", function (event ) {
+    event.preventDefault();
+    let pdf_nonce = jQuery(this).attr('data-wpnonce');
+    let quizID = jQuery(this).attr('data-quizId');
+    let result = jQuery('.qsm-results-page .qsm_questions_answers_section');
+    result.append('<div class="qsm-spinner-loader" style="margin: 0 20px;"></div>');
+    qsmAjaxGeneratePDF(pdf_nonce, quizID);
+});
+
+
+function qsmAjaxGeneratePDF(pdf_nonce, quizID) {
+    jQuery.ajax({
+		url: qmn_ajax_object.ajaxurl,
+		data: {
+            'action':'qsm_download_pdf_results_ajax',
+            'quiz_id': quizID,
+            'quiz_name': qmn_quiz_data[quizID]["quiz_name"],
+            'save_response': qsm_results_data[quizID]['save_response'],
+            'result_unique_id': qsm_results_data[quizID]['id'],
+            'pdf_nonce': pdf_nonce
+        },
+		type: 'POST',
+		success: function (response) {
+            response=JSON.parse(response);
+            jQuery('.qsm-spinner-loader').remove();
+            if (response.status){
+                qsmOpenPDF(response);
+            } else {
+                alert('Unable to generate PDF');
+            }
+		}
+	});
+}
+
+function qsmOpenPDF(response){
+    window.open(response.pdf,"_blank");
+    qsmDeletePDF(response);
+}
+
+function qsmDeletePDF(response){
+    jQuery.ajax({
+		url: qmn_ajax_object.ajaxurl,
+		data: {
+            'action':'qsm_pdf_cleanup',
+            'file': response.file,
+            'file_nonce': response.file_nonce
+        },
+		type: 'POST',
+        success: function (response) {
+            response=JSON.parse(response);
+            if(!response.status){
+                console.log("Unable to delete the pdf");
+            }
+        }
+	});
+}
